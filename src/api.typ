@@ -23,7 +23,6 @@
 /// - show-accessed: 是否显示访问日期（默认 true）
 #let init-gb7714-impl(
   bib-content,
-  hidden-bib,
   style: "numeric",
   version: "2025",
   show-url: true,
@@ -33,9 +32,6 @@
 ) = {
   // 加载 bib 数据
   let bib-data = load-bibliography(bib-content)
-
-  // 显示隐藏的 bibliography
-  hidden-bib
 
   // 设置状态
   _bib-data.update(bib-data)

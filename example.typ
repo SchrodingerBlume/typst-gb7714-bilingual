@@ -32,7 +32,10 @@
 }
 
 // 使用指定版本的顺序编码制
-#show: init-gb7714.with("/example.bib", style: "numeric", version: version)
+// 创建隐藏的 bibliography（让 @key 语法工作）
+#hide(bibliography("example.bib"))
+// 使用 read() 读取 bib 文件内容为 bytes
+#show: init-gb7714.with(read("example.bib"), style: "numeric", version: version)
 
 #align(center)[
   #text(size: 18pt, weight: "bold")[GB/T 7714—#version 顺序编码制示例]

@@ -39,8 +39,8 @@
   // 使用集中配置
   let punct = get-punctuation(version, lang)
   let type-rules = get-entry-type-rules(version)
-  // 标准号和标题之间用全角空格
-  let ideographic-space = "\u{3000}"
+  // 标准号和标题之间用 EM SPACE（CSL 规范 &#8195;）
+  let em-space = "\u{2003}"
 
   let parts = ()
 
@@ -60,7 +60,7 @@
   // 标准号 + 标题[S]
   let title-part = ""
   if number != "" {
-    title-part = number + ideographic-space
+    title-part = number + em-space
   }
   title-part += title + type-id
   parts.push(title-part)

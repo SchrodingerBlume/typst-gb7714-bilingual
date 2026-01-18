@@ -22,7 +22,7 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 ## 安装
 
 ```typst
-#import "@preview/gb7714-bilingual:0.1.0": init-gb7714, gb7714-bibliography, multicite
+#import "@preview/gb7714-bilingual:0.2.0": init-gb7714, gb7714-bibliography, multicite
 ```
 
 ## 使用方法
@@ -30,32 +30,32 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 ### 基本用法
 
 ```typst
-#import "@preview/gb7714-bilingual:0.1.0": init-gb7714, gb7714-bibliography, multicite
+#import "@preview/gb7714-bilingual:0.2.0": init-gb7714, gb7714-bibliography, multicite
 
+// 需要隐藏的 bibliography 让 @key 语法生效
+#hide(bibliography("ref.bib"))
 // 使用 2025 版本（默认）
-#show: init-gb7714.with("/ref.bib", style: "numeric", version: "2025")
+#show: init-gb7714.with(read("ref.bib"), style: "numeric", version: "2025")
 
 正文中使用 @wang2010guide 引用文献。
 
 #gb7714-bibliography()
 ```
 
-> **注意**：`bib-file` 路径必须以 `/` 开头，表示基于项目根目录的绝对路径。
+> **注意**：需要使用 `read()` 读取 bib 文件内容传入。
 
 ### 选择标准版本
 
 ```typst
 // 使用 GB/T 7714—2015
-#show: init-gb7714.with("/ref.bib", style: "numeric", version: "2015")
-
-// 使用 GB/T 7714—2025（默认）
-#show: init-gb7714.with("/ref.bib", style: "numeric", version: "2025")
+#show: init-gb7714.with(read("ref.bib"), style: "numeric", version: "2015")
 ```
 
 ### 著者-出版年制
 
 ```typst
-#show: init-gb7714.with("/ref.bib", style: "author-date", version: "2025")
+#hide(bibliography("ref.bib"))
+#show: init-gb7714.with(read("ref.bib"), style: "author-date", version: "2025")
 
 这是一个引用 @smith2020。
 
@@ -65,15 +65,16 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 ### 多个 BibTeX 文件
 
 ```typst
-// 使用多个 bib 文件
-#show: init-gb7714.with(("/main.bib", "/extra.bib"), style: "numeric")
+// 使用多个 bib 文件（用 + 合并内容）
+#hide(bibliography(("main.bib", "extra.bib")))
+#show: init-gb7714.with(read("main.bib") + read("extra.bib"), style: "numeric")
 ```
 
 ### 引用形式切换
 
 ```typst
-// 默认上标形式
-孔乙己提到#super[@smith2020]的重要发现
+// 默认上标形式（numeric 模式自动上标，无需 #super）
+孔乙己提到@smith2020 的重要发现
 
 // 非上标形式（散文引用）
 另见#cite(<smith2020>, form: "prose")的详细分析
@@ -182,13 +183,13 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 
 ## API 参考
 
-### `init-gb7714(bib-files, style: "numeric", version: "2025", doc)`
+### `init-gb7714(bib-content, style: "numeric", version: "2025", doc)`
 
 初始化 GB/T 7714 双语参考文献系统。
 
-- `bib-files`: BibTeX 文件路径或路径数组（**路径必须以 `/` 开头**）
-  - 单文件：`"/ref.bib"`
-  - 多文件：`("/main.bib", "/extra.bib")`
+- `bib-content`: BibTeX 文件内容（使用 `read()` 读取）
+  - 单文件：`read("ref.bib")`
+  - 多文件：`read("main.bib") + read("extra.bib")`
 - `show-url`: 是否显示 URL（默认 `true`）
 - `show-doi`: 是否显示 DOI（默认 `true`）
 - `show-accessed`: 是否显示访问日期（默认 `true`）
@@ -275,6 +276,10 @@ src/
 └── api.typ         # 公共 API
 lib.typ             # 主入口
 ```
+
+## 更新日志
+
+详见 [CHANGELOG.md](CHANGELOG.md)
 
 ## 许可证
 
