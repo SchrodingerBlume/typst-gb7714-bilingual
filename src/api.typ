@@ -32,6 +32,8 @@
 ) = {
   // 加载 bib 数据
   let bib-data = load-bibliography(bib-content)
+  // 创建隐藏的 bibliography（让 @key 语法工作）
+  hide(bibliography(bytes(bib-content)))
 
   // 设置状态
   _bib-data.update(bib-data)

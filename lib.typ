@@ -4,13 +4,11 @@
 //
 // 使用方法：
 //   #import "@preview/gb7714-bilingual:0.2.0": init-gb7714, gb7714-bibliography, multicite
-//   #hide(bibliography("ref.bib"))  // 让 @key 语法生效
 //   #show: init-gb7714.with(read("ref.bib"), style: "numeric", version: "2025")
 //   正文中使用 @key 引用...
 //   #gb7714-bibliography()
 //
 // 多文件支持：
-//   #hide(bibliography(("main.bib", "extra.bib")))
 //   #show: init-gb7714.with(read("main.bib") + read("extra.bib"), style: "numeric")
 //
 // 版本选择：
@@ -24,8 +22,8 @@
 
 /// 初始化 GB/T 7714 双语参考文献系统
 ///
-/// - bib-content: BibTeX 文件内容（使用 `read("/ref.bib")` 读取）
-///                多文件可用 `read("/a.bib") + read("/b.bib")` 合并
+/// - bib-content: BibTeX 文件内容（使用 `read("ref.bib")` 读取）
+///                多文件可用 `read("a.bib") + read("b.bib")` 合并
 /// - style: 引用风格，"numeric"（顺序编码制）或 "author-date"（著者-出版年制）
 /// - version: 标准版本，"2015" 或 "2025"（默认）
 /// - show-url: 是否显示 URL（默认 true）

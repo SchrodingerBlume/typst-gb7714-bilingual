@@ -5,16 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.0] - 2026-01-18
+## [0.2.0] - 2026-01-21
 
 ### Changed
 
 - **Breaking**: `init-gb7714` now accepts file content (bytes) instead of file path
-  - Old: `init-gb7714.with("/ref.bib", ...)`
+  - Old: `init-gb7714.with("ref.bib", ...)`
   - New: `init-gb7714.with(read("ref.bib"), ...)`
   - Reason: Published packages cannot access user project files
-- **Breaking**: Must manually call `#hide(bibliography(...))` to enable `@key` syntax
-  - Add before `init-gb7714`: `#hide(bibliography("ref.bib"))`
+- Hidden `bibliography()` is now automatically included; no manual `#hide(bibliography(...))` needed
 
 ## [0.1.0] - 2026-01-12
 

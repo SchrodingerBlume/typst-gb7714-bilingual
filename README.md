@@ -32,8 +32,6 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 ```typst
 #import "@preview/gb7714-bilingual:0.2.0": init-gb7714, gb7714-bibliography, multicite
 
-// 需要隐藏的 bibliography 让 @key 语法生效
-#hide(bibliography("ref.bib"))
 // 使用 2025 版本（默认）
 #show: init-gb7714.with(read("ref.bib"), style: "numeric", version: "2025")
 
@@ -54,7 +52,6 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 ### 著者-出版年制
 
 ```typst
-#hide(bibliography("ref.bib"))
 #show: init-gb7714.with(read("ref.bib"), style: "author-date", version: "2025")
 
 这是一个引用 @smith2020。
@@ -66,7 +63,6 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 
 ```typst
 // 使用多个 bib 文件（用 + 合并内容）
-#hide(bibliography(("main.bib", "extra.bib")))
 #show: init-gb7714.with(read("main.bib") + read("extra.bib"), style: "numeric")
 ```
 

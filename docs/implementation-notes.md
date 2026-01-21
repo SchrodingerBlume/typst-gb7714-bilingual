@@ -23,9 +23,6 @@
 ```typst
 #import "@preview/gb7714-bilingual:0.2.0": init-gb7714, gb7714-bibliography, multicite
 
-// 隐藏的 bibliography 让 @key 语法生效
-#hide(bibliography("ref.bib"))
-
 // 初始化（使用 read() 读取文件内容）
 #show: init-gb7714.with(read("ref.bib"), style: "numeric", version: "2025")
 
@@ -34,6 +31,8 @@
 #gb7714-bibliography()
 ```
 
+> **注**：`init-gb7714` 内部会自动调用 `hide(bibliography(...))` 让 `@key` 语法生效。
+
 ### 1.2 为什么需要 `read()`
 
 Typst 包发布后只能访问包内文件，无法读取用户项目文件。因此用户需要在外部使用 `read()` 读取 bib 文件内容传入。
@@ -41,7 +40,6 @@ Typst 包发布后只能访问包内文件，无法读取用户项目文件。�
 ### 1.3 多文件支持
 
 ```typst
-#hide(bibliography(("main.bib", "extra.bib")))
 #show: init-gb7714.with(read("main.bib") + read("extra.bib"), style: "numeric")
 ```
 
@@ -260,7 +258,7 @@ CSL 规范未明确定义排序的大小写敏感性。本库采用**大小写�
 // Author-date: Smith (2020a, 2020b)
 
 #multicite((key: "a", supplement: [260]), "b", form: "prose")
-// Numeric: [1]260[2]（非上标）
+// Numeric: [1：260, 2]（非上标）
 ```
 
 **参数说明**：
@@ -380,4 +378,3 @@ pdftotext build/2015-numeric.pdf - | grep -A 30 "^参考文献$"
 pdftotext build/2025-authordate.pdf - | grep -A 30 "^参考文献$"
 pdftotext build/2015-authordate.pdf - | grep -A 30 "^参考文献$"
 ```
-

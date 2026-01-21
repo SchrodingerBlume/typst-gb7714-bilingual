@@ -30,8 +30,6 @@
   it
 }
 
-// 创建隐藏的 bibliography（让 @key 语法工作）
-#hide(bibliography("example.bib"))
 // 使用指定版本的著者-出版年制
 #show: init-gb7714.with(
   read("example.bib"),
