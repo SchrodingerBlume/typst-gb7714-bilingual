@@ -24,8 +24,16 @@
   let address = f.at("address", default: f.at("location", default: ""))
   let pages = f.at("pages", default: "").replace("--", "-")
   let url = f.at("url", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
-  let type-id = render-type-id("thesis", has-url: url != "", version: version)
+  let type-id = render-type-id(
+    "thesis",
+    has-url: url != "",
+    version: version,
+    mark: mark,
+    medium: medium,
+  )
   let punct = get-punctuation(version, lang)
 
   render-base(

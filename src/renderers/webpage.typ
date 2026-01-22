@@ -27,9 +27,17 @@
   let date = f.at("date", default: "")
   let url = f.at("url", default: "")
   let note = f.at("note", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
   // 网页默认是 EB/OL
-  let type-id = render-type-id("webpage", has-url: true, version: version)
+  let type-id = render-type-id(
+    "webpage",
+    has-url: true,
+    version: version,
+    mark: mark,
+    medium: medium,
+  )
 
   // 使用集中配置
   let punct = get-punctuation(version, lang)

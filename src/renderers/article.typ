@@ -28,12 +28,16 @@
   let pages = f.at("pages", default: "").replace("--", "-")
   let doi = f.at("doi", default: "")
   let url = f.at("url", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
   // 使用实际条目类型（newspaper → [N]，periodical → [J]，article → [J]）
   let type-id = render-type-id(
     entry-type,
     has-url: url != "" or doi != "",
     version: version,
+    mark: mark,
+    medium: medium,
   )
   let punct = get-punctuation(version, lang)
 

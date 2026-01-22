@@ -263,9 +263,9 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 
 ### 特殊类型处理
 
-由于底层库 citegeist 不支持 `@standard` 和 `@newspaper` 等非标准 BibTeX 类型，本库提供以下解决方案：
+由于底层库 citegeist 不支持 `@standard` 和 `@newspaper` 等非标准 BibTeX 类型，本库提供多种解决方案：
 
-**方法 1：使用 `mark` 字段手动声明类型标识**
+**方法 1：使用 `mark`/`usera` 字段手动声明类型标识**
 
 ```bibtex
 % 报纸文章
@@ -288,16 +288,40 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
   year     = {2015}
 }
 
-% 汇编（论文集）
-@misc{collection2020,
-  mark     = {G},
-  title    = {论文集标题},
-  editor   = {编者},
-  year     = {2020}
+% 自定义载体（数据库/磁带）
+@misc{dbmt,
+  author   = {Rossmann, K and Rittel, H F},
+  title    = {Database created from magnetic resonance images},
+  year     = {1976},
+  usera    = {DB},
+  medium   = {MT}
+}
+% 输出：Rossmann K，Rittel H F. Database...[DB/MT]. 1976.
+```
+
+**方法 2：使用 `entrysubtype`/`note` 字段（biblatex-gb7714 兼容）**
+
+```bibtex
+% 标准（兼容 Zotero 导入）
+@book{gb7714,
+  title        = {信息与文献参考文献著录规则},
+  number       = {GB/T 7714—2015},
+  publisher    = {中国标准出版社},
+  year         = {2015},
+  entrysubtype = {standard}
+}
+
+% 报纸
+@article{news2024,
+  title    = {重要新闻标题},
+  author   = {记者},
+  journal  = {人民日报},
+  year     = {2024},
+  note     = {newspaper}
 }
 ```
 
-**方法 2：标准文献自动检测**
+**方法 3：标准文献自动检测**
 
 如果 `number` 字段以标准前缀开头（GB, ISO, IEC, IEEE, ANSI, DIN, JIS, BS），会自动识别为标准文献 `[S]`：
 
@@ -308,6 +332,8 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
   year     = {2015}
 }
 ```
+
+**类型检测优先级**：`mark/usera` > `entrysubtype/note` > `number 前缀` > 原始类型
 
 **支持的 mark 值**：
 
@@ -323,23 +349,48 @@ GB/T 7714 双语参考文献系统，支持中英文术语自动切换。
 | P    | [P]      | 专利     |
 | G    | [G]      | 汇编     |
 | EB   | [EB/OL]  | 网页     |
+| DB   | [DB]     | 数据库   |
+| CP   | [CP]     | 软件     |
+| CM   | [CM]     | 地图     |
+| DS   | [DS]     | 数据集   |
+
+**自定义载体标识**：使用 `medium` 字段指定载体，如 `medium = {MT}` 生成 `[类型/MT]`。
 
 ### 析出文献（书中章节）
 
-使用 `@inbook` 或 `@incollection` 时，会自动添加 `//` 析出符号：
+使用 `@inbook` 或 `@incollection` 时，会自动添加 `//` 析出符号，类型标识位于析出标题后：
 
 ```bibtex
 @inbook{chapter2019,
-  title     = {章节标题},
-  author    = {作者},
-  booktitle = {主书名},
-  publisher = {出版社},
+  title     = {深度学习基础},
+  author    = {张华},
+  booktitle = {人工智能导论},
+  publisher = {机械工业出版社},
+  address   = {北京},
   year      = {2019},
   pages     = {45--78}
 }
 ```
 
-输出：`作者. 章节标题//主书名[M]. 出版社，2019：45–78.`
+输出：`张华. 深度学习基础[M]//人工智能导论. 北京：机械工业出版社，2019：45–78.`
+
+**析出文献来源责任者**：支持 `bookauthor` 和 `editor` 字段表示来源文献的责任者：
+
+```bibtex
+@inbook{weinstein1974,
+  author     = {Weinstein, L and Swartz, M N},
+  title      = {Pathogenic properties of invading microorganisms},
+  booktitle  = {Pathologic physiology: mechanisms of disease},
+  bookauthor = {Sodeman, Jr., W A and Sodeman, W A},
+  edition    = {5},
+  publisher  = {Saunders},
+  address    = {Philadelphia},
+  year       = {1974},
+  pages      = {457--472}
+}
+```
+
+输出：`Weinstein L，Swartz M N. Pathogenic properties...[M]// Sodeman W A Jr，Sodeman W A. Pathologic physiology...`
 
 ## 项目结构
 

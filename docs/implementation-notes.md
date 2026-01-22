@@ -101,14 +101,15 @@ initialize-with=" "                   <!-- 名缩写后的分隔符 -->
 ### 4.1 基本结构
 
 ```
-[prefix] FAMILY given-initials, suffix
+[prefix] FAMILY given-initials suffix
 ```
 
 示例：
 
 - `de Gaulle C` → prefix="de", family="Gaulle", given="Charles"
-- `King M L, Jr.` → family="King", given="Martin Luther", suffix="Jr."
+- `King M L Jr.` → family="King", given="Martin Luther", suffix="Jr."（无逗号）
 - `van Beethoven L` → prefix="van", family="Beethoven", given="Ludwig"
+- `Sodeman W A Jr` → family="Sodeman", given="William A", suffix="Jr."（参见 GB/T 7714-2025 8.3.2 节示例）
 
 ### 4.2 CSL 相关属性
 

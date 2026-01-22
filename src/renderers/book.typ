@@ -30,9 +30,17 @@
   let year = str(f.at("year", default: "")) + year-suffix
   let pages = f.at("pages", default: "").replace("--", "-")
   let url = f.at("url", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
   // 使用实际条目类型（collection → [G]，其他 → [M]）
-  let type-id = render-type-id(entry-type, has-url: url != "", version: version)
+  let type-id = render-type-id(
+    entry-type,
+    has-url: url != "",
+    version: version,
+    mark: mark,
+    medium: medium,
+  )
   let punct = get-punctuation(version, lang)
 
   // 判断是否为析出文献（inbook, incollection, chapter）
@@ -40,31 +48,58 @@
     entry-type in ("inbook", "incollection", "chapter") and booktitle != ""
   )
 
-  // 构建标题部分
-  let title-part = if is-analytic {
-    // 析出文献：章节标题//主书名
-    title + "//" + booktitle
-  } else {
-    title
-  }
-  if volume != "" {
-    let vol-str = str(volume)
+  // 辅助函数：添加卷号后缀
+  let format-volume(base, vol) = {
+    if vol == "" { return base }
+    let vol-str = str(vol)
     // 检测是否为数值（纯数字或数字+字母如 2a）
     // 非数值（如 "第2卷"）直接使用，数值则添加前后缀
     let is-numeric = vol-str.match(regex("^[0-9]+[a-zA-Z]?$")) != none
     if is-numeric {
       if lang == "zh" {
-        title-part += (
-          punct.colon + terms.volume-prefix + vol-str + terms.volume-suffix
-        )
+        base + punct.colon + terms.volume-prefix + vol-str + terms.volume-suffix
       } else {
-        title-part += punct.colon + terms.volume-prefix + vol-str
+        base + punct.colon + terms.volume-prefix + vol-str
       }
     } else {
-      title-part += punct.colon + vol-str
+      base + punct.colon + vol-str
     }
   }
-  title-part += type-id
+
+  // 获取析出文献来源责任者（bookauthor 优先，其次 editor）
+  let source-authors = ""
+  if is-analytic {
+    // 尝试 bookauthor 字段（原始字符串，citegeist 可能不解析）
+    let bookauthor-raw = f.at("bookauthor", default: "")
+    if bookauthor-raw != "" {
+      source-authors = bookauthor-raw
+    } else {
+      // 尝试 editor
+      let editor-names = entry.parsed_names.at("editor", default: ())
+      if editor-names.len() > 0 {
+        source-authors = format-authors(
+          (author: editor-names),
+          lang,
+          version: version,
+          allow-anonymous: false,
+        )
+      }
+    }
+  }
+
+  // 构建标题部分
+  // 析出格式：章节标题[M]// 来源责任者. 主书名：卷号
+  // 非析出格式：书名：卷号[M]
+  let title-part = if is-analytic {
+    let source-title = format-volume(booktitle, volume)
+    if source-authors != "" {
+      title + type-id + "// " + source-authors + ". " + source-title
+    } else {
+      title + type-id + "//" + source-title
+    }
+  } else {
+    format-volume(title, volume) + type-id
+  }
 
   // 构建版本信息
   let edition-part = ""

@@ -35,11 +35,15 @@
   let address = f.at("address", default: f.at("location", default: ""))
   let publisher = f.at("publisher", default: f.at("organization", default: ""))
   let url = f.at("url", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
   let type-id = render-type-id(
     "inproceedings",
     has-url: url != "",
     version: version,
+    mark: mark,
+    medium: medium,
   )
 
   // 使用集中配置

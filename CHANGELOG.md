@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- `usera` field support as biblatex-recommended alias for `mark`
+- `entrysubtype` and `note` field detection for type disambiguation (biblatex-gb7714 compatibility)
+  - `@book` + `entrysubtype/note = "standard"` → `[S]`
+  - `@article` + `entrysubtype/note = "news"/"newspaper"` → `[N]`
+- `medium` field support for custom carrier types (e.g., `medium = {MT}` → `[DB/MT]`)
+- `bookauthor` field support for analytic entries (source document authors)
+- `editor` field fallback for source authors when `bookauthor` is missing
+
+### Fixed
+
+- `@inbook` type identifier position: now correctly placed after analytic title
+  - Before: `章节标题//主书名[M]`
+  - After: `章节标题[M]//主书名`
+- Name suffix formatting: removed comma before suffix (per GB/T 7714-2025 examples)
+  - Before: `King M L, Jr.`
+  - After: `King M L Jr.`
+
 ## [0.2.0] - 2026-01-21
 
 ### Added

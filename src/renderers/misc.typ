@@ -22,11 +22,15 @@
   let year = str(f.at("year", default: "")) + year-suffix
   let note = f.at("note", default: "")
   let howpublished = f.at("howpublished", default: "")
+  let mark = f.at("_resolved_mark", default: none)
+  let medium = f.at("_resolved_medium", default: none)
 
   let type-id = render-type-id(
     entry.entry_type,
     has-url: f.at("url", default: "") != "",
     version: version,
+    mark: mark,
+    medium: medium,
   )
   let punct = get-punctuation(version, lang)
 

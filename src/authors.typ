@@ -76,13 +76,14 @@
         })
         .join(" ")
 
-      // suffix 放在名缩写后面（保留原样）
+      // suffix 放在名缩写后面（保留原样，无逗号）
+      // 根据 GB/T 7714-2025 示例：Sodeman W A Jr（无逗号）
       // 注意：当 given 为空时（如组织名），不添加空格
       if suffix != "" {
         if initials != "" {
-          full-family + " " + initials + ", " + suffix
+          full-family + " " + initials + " " + suffix
         } else {
-          full-family + ", " + suffix
+          full-family + " " + suffix
         }
       } else {
         if initials != "" {
