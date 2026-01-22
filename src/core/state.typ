@@ -13,6 +13,8 @@
   show-url: true, // 是否显示 URL
   show-doi: true, // 是否显示 DOI
   show-accessed: true, // 是否显示访问日期
+  enable-year-suffix: true, // 是否启用年份消歧后缀（author-date 模式）
+  year-suffix-sort: "citation-order", // 消歧后缀排序方式："citation-order" (引用顺序) 或 "title" (标题字母序)
 ))
 
 // 用于标记引用的辅助函数（使用 metadata + query 模式）
@@ -35,10 +37,17 @@
 
 // 计算年份后缀（用于 author-date 模式消歧）
 // 返回 key -> suffix 的映射，如 ("smith2020a": "a", "smith2020b": "b")
-#let _compute-year-suffixes(bib, citations) = {
+#let _compute-year-suffixes(bib, citations, config: (enable-year-suffix: true, year-suffix-sort: "citation-order")) = {
+  // 如果禁用消歧，直接返回空映射
+  if not config.at("enable-year-suffix", default: true) {
+    return (:)
+  }
+
+  let sort-mode = config.at("year-suffix-sort", default: "citation-order")
+
   // 按 (第一作者姓, 年份) 分组
   let groups = (:)
-  for key in citations.keys() {
+  for (key, citation-order) in citations.pairs() {
     let entry = bib.at(key, default: none)
     if entry == none { continue }
 
@@ -54,15 +63,26 @@
     }
     groups
       .at(group-key)
-      .push((key: key, title: entry.fields.at("title", default: "")))
+      .push((
+        key: key,
+        title: entry.fields.at("title", default: ""),
+        order: citation-order,  // 保存引用顺序
+      ))
   }
 
   // 为每组分配后缀
   let suffixes = (:)
   for (group-key, items) in groups.pairs() {
     if items.len() > 1 {
-      // 按标题排序
-      let sorted-items = items.sorted(key: it => it.title)
+      // 根据配置选择排序方式
+      let sorted-items = if sort-mode == "citation-order" {
+        // 按引用顺序排序（默认）
+        items.sorted(key: it => it.order)
+      } else {
+        // 按标题字母序排序
+        items.sorted(key: it => it.title)
+      }
+
       let suffix-chars = "abcdefghijklmnopqrstuvwxyz"
       for (i, item) in sorted-items.enumerate() {
         if i < suffix-chars.len() {

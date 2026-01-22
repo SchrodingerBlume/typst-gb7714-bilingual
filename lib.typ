@@ -29,6 +29,8 @@
 /// - show-url: 是否显示 URL（默认 true）
 /// - show-doi: 是否显示 DOI（默认 true）
 /// - show-accessed: 是否显示访问日期（默认 true）
+/// - enable-year-suffix: 是否启用年份消歧后缀（默认 true，仅 author-date 模式生效）
+/// - year-suffix-sort: 消歧后缀排序方式，"citation-order"（引用顺序，默认）或 "title"（标题字母序）
 #let init-gb7714(
   bib-content,
   style: "numeric",
@@ -36,6 +38,8 @@
   show-url: true,
   show-doi: true,
   show-accessed: true,
+  enable-year-suffix: true,
+  year-suffix-sort: "citation-order",
   doc,
 ) = {
   // 调用内部实现
@@ -46,6 +50,8 @@
     show-url: show-url,
     show-doi: show-doi,
     show-accessed: show-accessed,
+    enable-year-suffix: enable-year-suffix,
+    year-suffix-sort: year-suffix-sort,
     doc,
   )
 }
