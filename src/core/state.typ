@@ -1,5 +1,7 @@
 // GB/T 7714 双语参考文献系统 - 状态管理模块
 
+#import "date-handler.typ": extract-year-info
+
 // ============================================================
 //                      状态定义
 // ============================================================
@@ -55,7 +57,17 @@
     let first-author = if names.len() > 0 {
       names.first().at("family", default: "")
     } else { "" }
-    let year = entry.fields.at("year", default: "")
+
+    // 使用 extract-year-info 提取年份，支持 date/year 字段
+    let year-info = extract-year-info(entry, year-suffix: "")
+    let year = if year-info.parsed != none {
+      // 如果解析成功，使用解析后的年份
+      year-info.parsed.year
+    } else {
+      // 如果无法解析（如 "1881(清光绪七年)"），使用原始 year-str
+      year-info.year-str
+    }
+
     let group-key = first-author + "|" + str(year)
 
     if group-key not in groups {
