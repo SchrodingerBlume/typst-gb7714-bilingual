@@ -25,6 +25,7 @@
 /// - year-suffix-sort: 消歧后缀排序方式，"citation-order"（引用顺序，默认）或 "title"（标题字母序）
 #let init-gb7714-impl(
   bib-content,
+  doc,
   style: "numeric",
   version: "2025",
   show-url: true,
@@ -32,7 +33,6 @@
   show-accessed: true,
   enable-year-suffix: true,
   year-suffix-sort: "citation-order",
-  doc,
 ) = {
   // 加载 bib 数据
   let bib-data = load-bibliography(bib-content)
