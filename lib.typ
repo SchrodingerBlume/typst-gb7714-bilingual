@@ -33,7 +33,6 @@
 /// - year-suffix-sort: 消歧后缀排序方式，"citation-order"（引用顺序，默认）或 "title"（标题字母序）
 #let init-gb7714(
   bib-content,
-  doc,
   style: "numeric",
   version: "2025",
   show-url: true,
@@ -41,11 +40,11 @@
   show-accessed: true,
   enable-year-suffix: true,
   year-suffix-sort: "citation-order",
+  doc,
 ) = {
   // 调用内部实现
   init-gb7714-impl(
     bib-content,
-    doc,
     style: style,
     version: version,
     show-url: show-url,
@@ -53,5 +52,6 @@
     show-accessed: show-accessed,
     enable-year-suffix: enable-year-suffix,
     year-suffix-sort: year-suffix-sort,
+    doc,
   )
 }
